@@ -29,8 +29,18 @@
         <li><a href="#contact">Contact</a></li>
     </ul>
 </nav>
-<section id="qr-code"> 
-    <img src="qrcode_ayabella123.github.io.png" alt="QR Code GitHub" class="qrcode"> 
+<section id="qr-code">
+    <h2>QR Code</h2>
+    <p>Générez un QR code vers une URL :</p>
+    <div class="qr-controls">
+        <input type="text" id="qr-text" value="https://ayabella123.github.io" placeholder="Entrez une URL ou du texte">
+        <button id="generate-qr">Générer</button>
+    </div>
+    <div id="qrcode"></div>
+    <p class="qr-note">Vous pouvez aussi ajouter une image dans le dossier <code>images/</code> et l'afficher comme ceci : <code>&lt;img src="images/mon-image.jpg"&gt;</code></p>
+    <label for="img-upload">Prévisualiser une image (client-side) :</label>
+    <input type="file" id="img-upload" accept="image/*">
+    <div id="img-preview"></div>
 </section>
 
 <main>
@@ -112,10 +122,38 @@
 <p class="copyright">© Aya Bella</p>
 </footer>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script>
+  function generate() {
+    var text = document.getElementById('qr-text').value;
+    var container = document.getElementById('qrcode');
+    container.innerHTML = '';
+    new QRCode(container, { text: text, width: 160, height: 160 });
+  }
+  document.getElementById('generate-qr').addEventListener('click', generate);
+  // générer au chargement
+  generate();
+
+  // prévisualisation d'image en local (sans upload)
+  document.getElementById('img-upload').addEventListener('change', function(e){
+    var file = e.target.files[0];
+    if(!file) return;
+    var reader = new FileReader();
+    reader.onload = function(evt){
+      var img = document.createElement('img');
+      img.src = evt.target.result;
+      img.alt = 'Prévisualisation';
+      img.className = 'preview';
+      var prev = document.getElementById('img-preview');
+      prev.innerHTML = '';
+      prev.appendChild(img);
+    };
+    reader.readAsDataURL(file);
+  });
+</script>
+
 </body>
 </html>
-
-
 
 
 
